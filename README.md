@@ -12,18 +12,16 @@ SkillMatch.AI is a comprehensive AI-powered platform that matches users with job
 
 ### Core Capabilities
 - 🤖 **AI-Powered Matching**: Uses advanced language models for intelligent skill and opportunity matching
-- 🕷️ **Web Scraping Integration**: Ethical scraping from SkillsFutureSG to enhance database with real-world Singapore data
 - 🎯 **Multi-Type Opportunities**: Supports jobs, projects, internships, and learning opportunities
 - 📊 **Comprehensive Scoring**: Detailed match scores with skill gaps and strengths analysis
 - 🧠 **Smart Skill Analysis**: Identifies related skills and provides learning recommendations
 - 💬 **Interactive Chat**: Natural language interface for career guidance
 - 📈 **Career Planning**: Skill gap analysis and personalized learning paths
-- 🇸🇬 **Singapore-Focused**: Enhanced with data from official SkillsFuture platform
 - 🔧 **Extensible**: Modular design for easy customization and extension
 
 ### Web Interface
 - 🌐 **Modern Web UI**: Beautiful, responsive interface built with Bootstrap 5
-- ⚡ **Real-time Updates**: Live progress tracking with WebSocket connections
+- ⚡ **Real-time Updates**: Live progress tracking and instant feedback
 - 📱 **Mobile-Friendly**: Optimized for all devices and screen sizes
 - 🎨 **Professional Design**: Clean, intuitive interface with smooth animations
 - 🔄 **Interactive Experience**: Dynamic forms, live validation, and instant feedback
@@ -84,20 +82,20 @@ python skillmatch.py match --profile profiles/john_developer.json
 SkillMatch.AI now includes a modern, responsive web interface for better user experience!
 
 ### Quick Start (Web Interface)
-To run the full web interface with real MySkillsFuture scraping:
+To run the web interface:
 
 ```bash
 # Make sure you're in the smai environment
 conda activate smai
 
 # Install web dependencies
-pip install flask flask-cors flask-socketio eventlet beautifulsoup4 aiohttp requests
+pip install flask flask-cors flask-socketio eventlet
 
 # Run the web application
 python web/app.py
 ```
 
-Visit `http://localhost:5003` to access the full web interface with real scraping capabilities.
+Visit `http://localhost:5003` to access the web interface.
 
 ⚠️ **Important**: Always ensure the `smai` conda environment is activated before running the web application.
 
@@ -108,13 +106,12 @@ Visit `http://localhost:5003` to access the full web interface with real scrapin
 - **📄 Resume Management** - Upload, download, and replace PDF resumes with secure file handling
 - **📈 Profile Analytics** - View statistics on total profiles, skills distribution, and experience levels
 - **🎯 Smart Matching** - Find opportunities with real-time progress tracking
-- **🕷️ Data Management** - Control web scraping with live progress monitoring and logs
 - **🤖 AI Career Chat** - Get personalized career advice with conversational interface
 - **📱 Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
 
 ### Web Interface Highlights
 - **Modern UI**: Bootstrap 5 design with custom SkillMatch.AI styling and smooth animations
-- **Real-time Updates**: WebSocket connections provide live progress tracking for all operations
+- **Real-time Updates**: Live progress tracking for all operations
 - **Smart Forms**: Interactive forms with validation, suggestion chips, and dynamic content
 - **Professional UX**: Intuitive navigation, flash messages, modals, and responsive layouts
 - **Complete Functionality**: All CLI features available through beautiful web interface
@@ -122,7 +119,7 @@ Visit `http://localhost:5003` to access the full web interface with real scrapin
 ### Files Structure
 ```
 web/
-├── app.py              # Main web application with real MySkillsFuture scraping
+├── app.py              # Main web application
 ├── templates/          # HTML templates
 │   ├── base.html       # Base template with navigation
 │   ├── index.html      # Dashboard page
@@ -130,7 +127,6 @@ web/
 │   ├── create_profile.html  # Profile creation/editing form with all fields
 │   ├── view_profile.html    # Detailed profile view with all sections
 │   ├── match.html      # Matching interface
-│   ├── scraping.html   # Data management with real scraping
 │   └── chat.html       # AI chat interface
 ├── static/             # Static assets (CSS, JS)
 │   ├── css/
@@ -317,48 +313,7 @@ python skillmatch.py chat
 ```
 
 
-#### 🚀 Quick Scraping Test
-```bash
-# Test scraping with small batches (recommended first)
-python skillmatch.py scrape-test
-```
 
-#### 📊 Full Database Enhancement
-```bash
-# Scrape and integrate new courses, skills, and opportunities  
-python skillmatch.py scrape --courses 50 --skills 100 --opportunities 30 --integrate
-```
-
-#### ⚡ Easy Management Script
-```bash
-# Use the management script for common scenarios
-./scraper_manager.sh initial    # First-time setup (100 courses, 200 skills) 
-./scraper_manager.sh weekly     # Weekly updates (25 courses, 50 skills)
-./scraper_manager.sh monthly    # Monthly refresh (100 courses, 150 skills)
-./scraper_manager.sh urgent     # Before job search (50 courses, 30 opportunities)
-```
-
-#### 🌱 Ethical Scraping Features
-- **Respectful rate limiting**: 3+ seconds between requests
-- **Educational purpose**: Clear identification as research bot
-- **Small batch sizes**: Avoids overwhelming servers
-- **robots.txt compliance**: Respects website policies
-- **No personal data**: Only public course/skill information
-
-#### 📅 Recommended Schedule
-- **First time**: `./scraper_manager.sh initial` (get baseline data)
-- **Weekly**: `./scraper_manager.sh weekly` (keep data fresh)
-- **Monthly**: `./scraper_manager.sh monthly` (comprehensive updates)
-- **Before job search**: `./scraper_manager.sh urgent` (job-focused scraping)
-
-#### 🎯 Enhanced Matching Results
-After scraping, your matches will include fresh opportunities from SkillsFutureSG:
-```bash
-# See enhanced results with Singapore opportunities
-python skillmatch.py match --profile profiles/john_developer.json
-```
-
-> **💡 Pro Tip**: The scraper **enhances** your existing SkillMatch.AI app - it doesn't replace it! Run scraping periodically to keep your database current with Singapore's latest courses and opportunities.
 
 ### Python API
 
@@ -413,27 +368,12 @@ python skillmatch.py learn --skills "python, machine learning"
 python skillmatch.py chat
 ```
 
-### Web Scraping Commands
-```bash
-# Quick test (recommended first)
-python skillmatch.py scrape-test
-
-# Full scraping with integration
-python skillmatch.py scrape --courses 50 --skills 100 --integrate
-
-# Use management script (easier)
-./scraper_manager.sh weekly    # Regular updates
-./scraper_manager.sh urgent    # Before job search
-./scraper_manager.sh initial   # First-time setup
-```
-
 ### File Structure After Setup
 ```
-SkillMatch.AI/
+SkillsMatch.AI/
 ├── data/
-│   ├── skills_database.json     # Enhanced with SkillsFutureSG data
-│   └── opportunities_database.json  # Real Singapore opportunities
-├── scraped_data/               # Raw scraping results & reports
+│   ├── skills_database.json
+│   └── opportunities_database.json
 ├── profiles/                   # Your career profiles
 └── config/                     # AI model configuration
 ```
@@ -450,22 +390,15 @@ SkillMatch.AI/
 │   │   └── opportunities.py # Jobs, projects, learning
 │   ├── agents/              # AI agents
 │   │   └── skill_match_agent.py  # Main AI agent
-│   ├── scrapers/            # Web scraping system (NEW!)
-│   │   ├── base_scraper.py  # Ethical scraping base class
-│   │   ├── myskillsfuture_scraper.py  # SkillsFutureSG scraper
-│   │   └── data_integrator.py  # Database integration
 │   ├── utils/               # Utilities
 │   │   ├── data_loader.py   # Data loading utilities
 │   │   └── skill_matcher.py # Matching algorithms
 │   └── cli.py              # Command line interface
 ├── data/                   # Data files
 │   ├── skills_database.json
-│   ├── opportunities_database.json
-│   └── backups/            # Auto-backups before scraping
-├── scraped_data/           # Raw scraped data & reports
+│   └── opportunities_database.json
 ├── config/                 # Configuration
 ├── profiles/              # Sample user profiles
-├── scraper_manager.sh     # Easy scraping management script
 └── tests/                 # Test files
 ```
 
@@ -516,19 +449,15 @@ The system organizes skills into categories:
 
 ## 📊 Example Output
 
-### Match Results (Enhanced with SkillsFutureSG Data)
+### Match Results
 ```
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
 ┃ Title                       ┃ Type        ┃ Company              ┃ Location        ┃ Match Score ┃ Skills Match  ┃
 ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
-│ Digital Transformation Spec│ Job         │ SkillsFutureSG       │ Singapore 🇸🇬   │    90.0%    │    100.0%     │
-│ Data Science Bootcamp      │ Learning    │ SkillsFutureSG       │ Singapore 🇸🇬   │    90.0%    │    100.0%     │
 │ Senior Python Developer    │ Job         │ TechCorp Inc         │ San Francisco   │    87.3%    │     92.1%     │
 │ Data Scientist             │ Job         │ Analytics Pro        │ New York, NY    │    78.9%    │     85.4%     │
 │ Machine Learning Fundamentals│ Learning   │ DataLearn Academy    │ Remote          │    65.2%    │     78.8%     │
 └─────────────────────────────┴─────────────┴──────────────────────┴─────────────────┴─────────────┴───────────────┘
-
-🇸🇬 Notice: Top matches now include real opportunities from Singapore's SkillsFutureSG platform!
 
 Top Match Details:
 📋 Senior Python Developer
@@ -671,17 +600,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Microsoft Agent Framework** for the powerful AI agent capabilities
 - **GitHub Models** for providing access to state-of-the-art language models
-- **SkillsFutureSG** for providing comprehensive skills and course data
-- **SkillsFuture Singapore** for the excellent career development platform
 - **Pydantic** for robust data validation and modeling
 - **Rich** for beautiful terminal output
 - **Click** for the CLI framework
 
-## � Additional Documentation
+## 📚 Additional Documentation
 
-- **[SCRAPING_ETHICS.md](SCRAPING_ETHICS.md)** - Comprehensive ethical scraping guidelines
-- **[SCRAPER_SCHEDULE.md](SCRAPER_SCHEDULE.md)** - Detailed scraping schedule and automation guide
-- **[WEB_SCRAPING_COMPLETE.md](WEB_SCRAPING_COMPLETE.md)** - Complete web scraping implementation details
+- **[VECTOR_DATABASE_SUCCESS.md](VECTOR_DATABASE_SUCCESS.md)** - Vector database integration details
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines
 - **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Full project overview and results
 
@@ -694,15 +619,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🗺️ Roadmap
 
 ### ✅ Completed Features
-- [x] **Web scraping from SkillsFutureSG** - ✅ **COMPLETED!**
-- [x] **Ethical scraping with rate limiting** - ✅ **COMPLETED!**
-- [x] **Automated database enhancement** - ✅ **COMPLETED!**
 - [x] **Modern Web Interface** - ✅ **COMPLETED!**
 - [x] **Comprehensive Career Profiles System** - ✅ **COMPLETED!**
 - [x] **Professional Profile Management** - ✅ **COMPLETED!**
 - [x] **Resume Upload & Management** - ✅ **COMPLETED!**
 - [x] **Profile Analytics & Statistics** - ✅ **COMPLETED!**
 - [x] **Full CRUD Operations** - ✅ **COMPLETED!**
+- [x] **Vector Database Integration** - ✅ **COMPLETED!**
+- [x] **PDF Resume Processing** - ✅ **COMPLETED!**
 
 ### 🚧 In Development
 - [ ] Enhanced AI matching algorithms
@@ -716,7 +640,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] API for third-party integrations
 - [ ] Mobile application
 - [ ] Enterprise features and deployment
-- [ ] Multi-country support (expand beyond Singapore)
 - [ ] React frontend migration
 - [ ] Real-time collaboration features
 
