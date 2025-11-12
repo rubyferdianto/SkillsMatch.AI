@@ -53,12 +53,24 @@ cd "$WEB_DIR" || {
     exit 1
 }
 
-# Activate environment and run
-conda activate smai
+# FORCE activate environment with multiple attempts
+echo "🔧 Forcing conda activation..."
 
-# Double-check activation
-if [ "$CONDA_DEFAULT_ENV" = "smai" ]; then
-    echo "✅ smai environment activated successfully!"
+# Method 1: Standard conda activate
+conda activate smai 2>/dev/null
+
+# Method 2: Force activation if first attempt failed
+if [ "$CONDA_DEFAULT_ENV" != "smai" ]; then
+    echo "🔄 First activation attempt failed, trying alternative methods..."
+    eval "$(conda shell.bash hook)"
+    conda activate smai
+fi
+
+# Method 3: Use conda run if activation still failed
+if [ "$CONDA_DEFAULT_ENV" != "smai" ]; then
+    echo "⚠️  Direct activation failed. Using conda run as primary method..."
+    echo "🔧 Running: conda run -n smai python app.py"
+    echo "✅ Running in correct conda environment: smai"
     echo "📂 Working directory: $(pwd)"
     echo "🌐 Starting Flask app on http://localhost:5003"
     echo "💡 App features: Profile Matching, AI Chat, Database Management"
@@ -67,11 +79,22 @@ if [ "$CONDA_DEFAULT_ENV" = "smai" ]; then
     echo "========================================"
     echo ""
     
-    # Start the Flask application
-    python app.py
-else
-    echo "⚠️  Environment activation failed. Using conda run as fallback..."
-    echo "🔧 Running: conda run -n smai python app.py"
-    echo ""
+    # Use conda run to ensure correct environment
     conda run -n smai python app.py
+else
+    echo "✅ smai environment activated successfully!"
+    
+    # Verify Python environment
+    echo "🐍 Using Python: $(which python)"
+    echo "📦 Conda environment: $CONDA_DEFAULT_ENV"
+    echo "� Working directory: $(pwd)"
+    echo "🌐 Starting Flask app on http://localhost:5003"
+    echo "💡 App features: Profile Matching, AI Chat, Database Management"
+    echo ""
+    echo "Press Ctrl+C to stop the server"
+    echo "========================================"
+    echo ""
+    
+    # Start the Flask application in activated environment
+    python app.py
 fi

@@ -216,7 +216,7 @@
                     
                     <div class="card-footer bg-gradient-light border-0 pt-3" style="border-radius: 0 0 12px 12px;">
                         <div class="d-flex gap-2">
-                            <a href="{{ url_for('match_page') }}" class="btn btn-primary btn-sm flex-fill shadow-sm" style="border-radius: 8px;">
+                            <a href="{{ url_for('match_page') }}?auto_match={{ profile.id }}" class="btn btn-primary btn-sm flex-fill shadow-sm" style="border-radius: 8px;">
                                 <i class="fas fa-search me-1"></i>Find Matches
                             </a>
                             <a href="{{ url_for('view_profile', profile_id=profile.id) }}" class="btn btn-outline-secondary btn-sm shadow-sm" style="border-radius: 8px;">

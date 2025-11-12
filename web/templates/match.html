@@ -8,7 +8,10 @@
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="mb-2"><i class="fas fa-search me-2"></i>AI Find Career Matches</h1>
-            <p class="text-muted">Discover opportunities that align user profile with skills and career goals using AI</p>
+            <p class="text-muted" id="pageDescription">Discover opportunities that align user profile with skills and career goals using AI</p>
+            <div id="autoMatchIndicator" class="alert alert-info" style="display: none;">
+                <i class="fas fa-magic me-2"></i><strong>Auto-Matching Active:</strong> Finding matches for your selected profile...
+            </div>
         </div>
     </div>
 
@@ -171,6 +174,9 @@
 function startMatching(profileId) {
     console.log('🔍 Starting job matching for profile:', profileId);
     
+    // Store profile ID globally for PDF generation
+    window.currentProfileId = profileId;
+    
     // Call the actual matching function
     performMatching(profileId);
 }
@@ -293,7 +299,7 @@ function displayResults(data) {
                             </div>
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 mb-2">
                                 <button class="btn btn-primary btn-sm flex-fill" onclick="viewJob('${match.job_id || index}')">
                                     View Details
                                 </button>
@@ -301,6 +307,9 @@ function displayResults(data) {
                                     <i class="fas fa-bookmark"></i>
                                 </button>
                             </div>
+                            <button class="btn btn-info btn-sm w-100" onclick="generateJobApplicationPDF('${match.job_id || index}', '${(match.title || 'Job').replace(/'/g, "\\'")}')">
+                                <i class="fas fa-file-pdf me-1"></i>Generate Application PDF
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -347,9 +356,120 @@ function saveJob(jobId) {
     alert('Job saved successfully!');
 }
 
+function generateJobApplicationPDF(jobId, jobTitle) {
+    console.log('Generating PDF for job:', jobId, jobTitle);
+    
+    // Show loading state
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Generating...';
+    button.disabled = true;
+    
+    // Get current profile ID from global variable
+    const profileId = window.currentProfileId;
+    
+    if (!profileId) {
+        alert('Profile not found. Please try searching again.');
+        button.innerHTML = originalText;
+        button.disabled = false;
+        return;
+    }
+    
+    // Make API request to generate PDF
+    fetch('/api/generate-job-application-pdf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            profile_id: profileId,
+            job_id: jobId,
+            job_title: jobTitle
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to generate PDF');
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `SkillsMatch_Application_${jobTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Show success message
+        button.innerHTML = '<i class="fas fa-check me-1"></i>Downloaded!';
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Error generating PDF:', error);
+        alert('Failed to generate PDF. Please try again.');
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Match page JavaScript loaded successfully');
+    
+    // Check for auto-match parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoMatchProfileId = urlParams.get('auto_match');
+    
+    console.log('🔍 Checking URL parameters:', window.location.search);
+    console.log('🔍 Auto-match profile ID:', autoMatchProfileId);
+    
+    if (autoMatchProfileId) {
+        console.log('🎯 Auto-matching triggered for profile:', autoMatchProfileId);
+        console.log('⏱️ Starting matching in 1 second...');
+        
+        // Show auto-match indicator
+        const autoMatchIndicator = document.getElementById('autoMatchIndicator');
+        if (autoMatchIndicator) {
+            autoMatchIndicator.style.display = 'block';
+        }
+        
+        // Show a brief loading message and highlight the auto-selected profile
+        const progressSection = document.getElementById('matchingProgress');
+        if (progressSection) {
+            progressSection.style.display = 'block';
+            const statusEl = document.getElementById('progressStatus');
+            if (statusEl) {
+                statusEl.innerHTML = '<small class="text-info">🎯 Auto-matching started for your profile...</small>';
+            }
+        }
+        
+        // Highlight the selected profile card
+        const profileCards = document.querySelectorAll('.profile-selector');
+        profileCards.forEach(card => {
+            if (card.dataset.profileId === autoMatchProfileId) {
+                card.classList.add('border-primary', 'bg-light');
+                card.style.borderWidth = '2px';
+                // Scroll to the selected profile card
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+        
+        // Small delay to ensure page is fully loaded and user sees the transition
+        setTimeout(() => {
+            console.log('🚀 Executing auto-match for profile:', autoMatchProfileId);
+            startMatching(autoMatchProfileId);
+        }, 1000);
+    } else {
+        console.log('ℹ️ No auto-match parameter found - manual selection required');
+    }
     
     // New search button
     const newSearchBtn = document.getElementById('newSearch');
