@@ -1511,19 +1511,29 @@ def profiles():
 @app.route('/jobs')
 def jobs_listing():
     """Display all jobs from database"""
+    print("🔍 JOBS LISTING: Starting job listing request...")
     try:
         # Using global imports: Job already imported
         try:
-            from database.db_config import DatabaseConfig
+            from database.db_config import db_config
         except ImportError:
-            from web.database.models import Job
-            from web.database.db_config import DatabaseConfig
+            try:
+                from web.database.db_config import db_config
+            except ImportError:
+                # Create minimal fallback
+                class MinimalDBConfig:
+                    @contextlib.contextmanager
+                    def session_scope(self):
+                        yield None
+                db_config = MinimalDBConfig()
+                print("⚠️ Using fallback db_config")
         
-        # Get database session
-        db_config = DatabaseConfig()
-        session = db_config.SessionLocal()
-        
-        try:
+        # Use the same pattern as other working routes
+        with db_config.session_scope() as session:
+            if session is None:
+                print("⚠️ Database session is None - using fallback")
+                return render_template('jobs_listing.html', jobs=[], total_jobs=0)
+                
             # Get all active jobs
             jobs = session.query(Job).filter(Job.is_active == True).order_by(Job.created_at.desc()).all()
             
@@ -1535,9 +1545,6 @@ def jobs_listing():
             return render_template('jobs_listing.html', 
                                  jobs=jobs_data, 
                                  total_jobs=len(jobs_data))
-        
-        finally:
-            session.close()
             
     except Exception as e:
         print(f"Error loading jobs: {e}")
