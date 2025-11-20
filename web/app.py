@@ -56,22 +56,34 @@ load_dotenv(env_path)
 
 # Vector search service import
 try:
-    from services.simple_vector_service import get_vector_service
+    try:
+        from services.simple_vector_service import get_vector_service
+    except ImportError:
+        from web.services.simple_vector_service import get_vector_service
     VECTOR_SEARCH_AVAILABLE = True
     print("✅ Vector search service available")
 except ImportError as e:
     print(f"⚠️ Vector search service not available: {e}")
     VECTOR_SEARCH_AVAILABLE = False
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add paths for imports - handle both development and production
+app_dir = Path(__file__).parent
+project_root = app_dir.parent
+sys.path.insert(0, str(project_root))  # Add project root
+sys.path.insert(0, str(app_dir))       # Add web directory
 
 # Import storage layer
 try:
     from web.storage import profile_manager
 except ImportError:
-    # Fallback for when running from web directory
-    from storage import profile_manager
+    try:
+        from storage import profile_manager
+    except ImportError:
+        # Production fallback - create minimal profile manager
+        class MinimalProfileManager:
+            def list_profiles(self): return []
+            def load_profile(self, profile_id): return None
+        profile_manager = MinimalProfileManager()
 
 # Debug: Check if API keys are loaded
 openai_key = os.environ.get('OPENAI_API_KEY')
@@ -903,8 +915,12 @@ def index():
     # Move this OUTSIDE data_loader condition so it always executes
     try:
         print("🔍 HOME: Attempting database imports...")
-        from database.models import Job, UserProfile
-        from database.db_config import DatabaseConfig
+        try:
+            from database.models import Job, UserProfile
+            from database.db_config import DatabaseConfig
+        except ImportError:
+            from web.database.models import Job, UserProfile
+            from web.database.db_config import DatabaseConfig
         print("🔍 HOME: Database imports successful!")
         
         # Get database session (exact same pattern as jobs_listing)
@@ -1157,8 +1173,12 @@ def dashboard():
         
         # Get job statistics from database
         try:
-            from database.db_config import db_config
-            from database.models import Job, UserProfile
+            try:
+                from database.db_config import db_config
+                from database.models import Job, UserProfile
+            except ImportError:
+                from web.database.db_config import db_config
+                from web.database.models import Job, UserProfile
             
             with db_config.session_scope() as session:
                 # Count total jobs
@@ -1393,8 +1413,12 @@ def profiles():
 def jobs_listing():
     """Display all jobs from database"""
     try:
-        from database.models import Job
-        from database.db_config import DatabaseConfig
+        try:
+            from database.models import Job
+            from database.db_config import DatabaseConfig
+        except ImportError:
+            from web.database.models import Job
+            from web.database.db_config import DatabaseConfig
         
         # Get database session
         db_config = DatabaseConfig()
@@ -1893,8 +1917,12 @@ def api_match():
             print(f"🔍 Gathering jobs for AI analysis for {profile_data.get('name', 'user')}")
             
             # Get jobs from SQLite database
-            from database.db_config import db_config
-            from database.models import Job
+            try:
+                from database.db_config import db_config
+                from database.models import Job
+            except ImportError:
+                from web.database.db_config import db_config
+                from web.database.models import Job
             
             with db_config.session_scope() as session:
                 jobs = session.query(Job).filter(Job.is_active == True).limit(200).all()
@@ -2243,8 +2271,12 @@ def generate_job_application_pdf():
         # Find job data from database
         job_data = None
         try:
-            from database.db_config import db_config
-            from database.models import Job
+            try:
+                from database.db_config import db_config
+                from database.models import Job
+            except ImportError:
+                from web.database.db_config import db_config
+                from web.database.models import Job
             
             with db_config.session_scope() as session:
                 job = session.query(Job).filter(Job.job_id == job_id).first()
@@ -2448,7 +2480,10 @@ def generate_job_application_pdf():
         
         # Import PDF generator
         try:
-            from services.pdf_generator import get_pdf_generator
+            try:
+                from services.pdf_generator import get_pdf_generator
+            except ImportError:
+                from web.services.pdf_generator import get_pdf_generator
             pdf_gen = get_pdf_generator()
             
             # Generate PDF
@@ -2496,8 +2531,12 @@ def fetch_jobs_from_api():
     try:
         import requests
         from datetime import datetime
-        from database.models import Job
-        from database.db_config import db_config
+        try:
+            from database.models import Job
+            from database.db_config import db_config
+        except ImportError:
+            from web.database.models import Job
+            from web.database.db_config import db_config
         
         print("🔄 Starting job fetch from FindSGJobs API...")
         
