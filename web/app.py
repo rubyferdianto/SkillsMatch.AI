@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import asyncio
+import contextlib
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Any
@@ -69,8 +70,21 @@ except ImportError as e:
 # Add paths for imports - handle both development and production
 app_dir = Path(__file__).parent
 project_root = app_dir.parent
+
+# Debug path information in production
+is_production = os.environ.get('RENDER') or os.environ.get('RAILWAY') or os.environ.get('HEROKU')
+if is_production:
+    print(f"📍 App directory: {app_dir}")
+    print(f"📍 Project root: {project_root}")
+    print(f"📍 Current working directory: {os.getcwd()}")
+    print(f"📍 Python path before: {sys.path[:3]}")
+
 sys.path.insert(0, str(project_root))  # Add project root
-sys.path.insert(0, str(app_dir))       # Add web directory
+sys.path.insert(0, str(app_dir))       # Add web directory  
+sys.path.insert(0, os.getcwd())        # Add current working directory
+
+if is_production:
+    print(f"📍 Python path after: {sys.path[:5]}")
 
 # Import storage layer
 try:
@@ -102,6 +116,81 @@ else:
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+# Global database imports with comprehensive fallback handling
+def import_database_modules():
+    """Import database modules with comprehensive fallback handling."""
+    import_attempts = []
+    
+    # Check if database directory exists in various locations
+    database_paths = [
+        os.path.join(os.getcwd(), 'database'),  # Current working directory
+        os.path.join(os.getcwd(), 'web', 'database'),  # Web subdirectory in cwd
+        os.path.join(os.path.dirname(__file__), 'database'),  # Local to app.py
+        os.path.join(os.path.dirname(__file__), '..', 'web', 'database')  # Parent web directory
+    ]
+    
+    if is_production:
+        print(f"🔍 Checking database paths:")
+        for i, path in enumerate(database_paths, 1):
+            exists = os.path.exists(path)
+            print(f"   Path {i}: {path} - {'EXISTS' if exists else 'NOT FOUND'}")
+    
+    # Attempt 1: Relative import from current directory
+    try:
+        from database.models import UserProfile, Job, JobSkill, UserProfileSkill
+        print("✅ Successfully imported database.models using relative paths")
+        return UserProfile, Job, JobSkill, UserProfileSkill
+    except ImportError as e1:
+        import_attempts.append(f"Relative import: {e1}")
+    
+    # Attempt 2: Web prefix import
+    try:
+        from web.database.models import UserProfile, Job, JobSkill, UserProfileSkill
+        print("✅ Successfully imported database.models using web.database paths")
+        return UserProfile, Job, JobSkill, UserProfileSkill
+    except ImportError as e2:
+        import_attempts.append(f"Web prefix import: {e2}")
+    
+    # Attempt 3: Direct path manipulation
+    for database_path in database_paths:
+        if os.path.exists(database_path):
+            try:
+                parent_path = os.path.dirname(database_path)
+                if parent_path not in sys.path:
+                    sys.path.insert(0, parent_path)
+                
+                import database.models as db_models
+                UserProfile = db_models.UserProfile
+                Job = db_models.Job
+                JobSkill = db_models.JobSkill
+                UserProfileSkill = db_models.UserProfileSkill
+                print(f"✅ Successfully imported database.models using path manipulation: {parent_path}")
+                return UserProfile, Job, JobSkill, UserProfileSkill
+            except ImportError as e:
+                import_attempts.append(f"Path manipulation ({parent_path}): {e}")
+                continue
+    
+    # If all fails, create placeholders
+    if is_production:
+        print(f"❌ All database import attempts failed:")
+        for attempt in import_attempts:
+            print(f"   - {attempt}")
+    
+    class UserProfile:
+        def __init__(self, **kwargs): pass
+    class Job:
+        def __init__(self, **kwargs): pass
+    class JobSkill:
+        def __init__(self, **kwargs): pass
+    class UserProfileSkill:
+        def __init__(self, **kwargs): pass
+    
+    print("⚠️ Using placeholder classes - database functionality limited")
+    return UserProfile, Job, JobSkill, UserProfileSkill
+
+# Import database modules globally
+UserProfile, Job, JobSkill, UserProfileSkill = import_database_modules()
 
 def parse_datetime(date_str):
     """Parse datetime string from database into datetime object"""
@@ -915,11 +1004,17 @@ def index():
     # Move this OUTSIDE data_loader condition so it always executes
     try:
         print("🔍 HOME: Attempting database imports...")
+        # Using global imports: Job, UserProfile already imported
         try:
-            from database.models import Job, UserProfile
             from database.db_config import DatabaseConfig
         except ImportError:
-            from web.database.models import Job, UserProfile
+            try:
+                from web.database.db_config import DatabaseConfig
+            except ImportError:
+                # Create minimal fallback
+                class DatabaseConfig:
+                    @staticmethod
+                    def get_database_url(): return 'sqlite:///job_opportunities.db'
             from web.database.db_config import DatabaseConfig
         print("🔍 HOME: Database imports successful!")
         
@@ -1173,12 +1268,19 @@ def dashboard():
         
         # Get job statistics from database
         try:
+            # Using global imports: Job, UserProfile already imported
             try:
                 from database.db_config import db_config
-                from database.models import Job, UserProfile
             except ImportError:
-                from web.database.db_config import db_config
-                from web.database.models import Job, UserProfile
+                try:
+                    from web.database.db_config import db_config
+                except ImportError:
+                    # Create minimal fallback
+                    class MinimalDBConfig:
+                        @contextlib.contextmanager
+                        def session_scope(self):
+                            yield None
+                    db_config = MinimalDBConfig()
             
             with db_config.session_scope() as session:
                 # Count total jobs
@@ -1413,8 +1515,8 @@ def profiles():
 def jobs_listing():
     """Display all jobs from database"""
     try:
+        # Using global imports: Job already imported
         try:
-            from database.models import Job
             from database.db_config import DatabaseConfig
         except ImportError:
             from web.database.models import Job
@@ -1916,13 +2018,19 @@ def api_match():
         try:
             print(f"🔍 Gathering jobs for AI analysis for {profile_data.get('name', 'user')}")
             
-            # Get jobs from SQLite database
+            # Get jobs from SQLite database - using global imports: Job already imported
             try:
                 from database.db_config import db_config
-                from database.models import Job
             except ImportError:
-                from web.database.db_config import db_config
-                from web.database.models import Job
+                try:
+                    from web.database.db_config import db_config
+                except ImportError:
+                    # Create minimal fallback
+                    class MinimalDBConfig:
+                        @contextlib.contextmanager
+                        def session_scope(self):
+                            yield None
+                    db_config = MinimalDBConfig()
             
             with db_config.session_scope() as session:
                 jobs = session.query(Job).filter(Job.is_active == True).limit(200).all()
@@ -2270,13 +2378,20 @@ def generate_job_application_pdf():
         
         # Find job data from database
         job_data = None
+        # Using global imports: Job already imported  
         try:
             try:
                 from database.db_config import db_config
-                from database.models import Job
             except ImportError:
-                from web.database.db_config import db_config
-                from web.database.models import Job
+                try:
+                    from web.database.db_config import db_config
+                except ImportError:
+                    # Create minimal fallback
+                    class MinimalDBConfig:
+                        @contextlib.contextmanager
+                        def session_scope(self):
+                            yield None
+                    db_config = MinimalDBConfig()
             
             with db_config.session_scope() as session:
                 job = session.query(Job).filter(Job.job_id == job_id).first()
@@ -2531,12 +2646,19 @@ def fetch_jobs_from_api():
     try:
         import requests
         from datetime import datetime
+        # Using global imports: Job already imported
         try:
-            from database.models import Job
             from database.db_config import db_config
         except ImportError:
-            from web.database.models import Job
-            from web.database.db_config import db_config
+            try:
+                from web.database.db_config import db_config
+            except ImportError:
+                # Create minimal fallback
+                class MinimalDBConfig:
+                    @contextlib.contextmanager
+                    def session_scope(self):
+                        yield None
+                db_config = MinimalDBConfig()
         
         print("🔄 Starting job fetch from FindSGJobs API...")
         
