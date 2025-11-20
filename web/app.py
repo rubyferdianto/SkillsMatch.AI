@@ -2647,6 +2647,7 @@ def generate_job_application_pdf():
 @app.route('/api/fetch-jobs', methods=['POST'])
 def fetch_jobs_from_api():
     """Fetch jobs from FindSGJobs API and update database"""
+    print("🔄 FETCH-JOBS API: Starting job fetch request...")
     try:
         import requests
         from datetime import datetime
@@ -2704,10 +2705,12 @@ def fetch_jobs_from_api():
         jobs_data = all_jobs_data
         print(f"📊 Total jobs collected: {len(jobs_data)}")
         
-        # Create database session
-        session = db_config.get_session()
-        
-        try:
+        # Use consistent database session pattern like other routes
+        with db_config.session_scope() as session:
+            if session is None:
+                print("⚠️ Database session is None - using fallback")
+                return jsonify({'success': False, 'error': 'Database connection failed'}), 500
+                
             # Clear existing jobs
             session.query(Job).delete()
             session.commit()
@@ -2821,14 +2824,6 @@ def fetch_jobs_from_api():
                 'jobs_count': jobs_added,
                 'message': f'Successfully fetched and stored {jobs_added} jobs from FindSGJobs API'
             })
-            
-        except Exception as db_error:
-            session.rollback()
-            print(f"❌ Database error: {db_error}")
-            return jsonify({'success': False, 'error': f'Database error: {str(db_error)}'}), 500
-        
-        finally:
-            session.close()
             
     except requests.RequestException as req_error:
         print(f"❌ API request error: {req_error}")
