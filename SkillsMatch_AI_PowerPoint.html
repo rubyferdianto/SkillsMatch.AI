@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillsMatch.AI - Professional Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .slide {
+            width: 1920px;
+            height: 1080px;
+            background: white;
+            margin: 20px auto;
+            padding: 80px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            page-break-after: always;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);
+            color: white;
+            padding: 30px;
+            margin: -80px -80px 60px -80px;
+            text-align: center;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: #1a365d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 2rem;
+            color: #1a365d;
+            margin: 30px 0 20px 0;
+            border-bottom: 3px solid #1a365d;
+            padding-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            flex-grow: 1;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 8px solid #1a365d;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-box h4 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-box h4::before {
+            content: '✨';
+            margin-right: 15px;
+            font-size: 1.8rem;
+        }
+
+        .tech-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .tech-badge {
+            background: linear-gradient(135deg, #1a365d, #2d5a87);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(26, 54, 93, 0.3);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 50px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            min-width: 200px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #1a365d;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1.3rem;
+            color: #5a6c7d;
+            margin-top: 10px;
+        }
+
+        .architecture-flow {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .flow-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .flow-item {
+            background: linear-gradient(135deg, #1a365d, #2d5a87);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            flex: 1;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .flow-arrow {
+            font-size: 2.5rem;
+            color: #1a365d;
+            font-weight: bold;
+        }
+
+        .bullet-list {
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .bullet-list li {
+            margin: 15px 0;
+            list-style: none;
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .bullet-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #1a365d;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .highlight-section {
+            background: linear-gradient(135deg, #1a365d, #2d5a87);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .highlight-section h4 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-section {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .contact-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 15px 25px;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            background: white;
+            color: #2c3e50;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 6rem;
+            margin-bottom: 30px;
+        }
+
+        @media print {
+            .slide {
+                page-break-after: always;
+                box-shadow: none;
+                margin: 0;
+            }
+            
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Slide 1: Title & Introduction -->
+    <div class="slide">
+        <div class="slide-number">1/4</div>
+        <div class="slide-header">
+            <div class="logo">🎯</div>
+            <h1>SkillsMatch.AI</h1>
+            <p class="subtitle">Intelligent Career and Skill Matching System</p>
+        </div>
+        
+        <div class="highlight-section">
+            <h4>AI-Powered Platform for Career Success</h4>
+            <p style="font-size: 1.5rem;">Matching users with jobs, projects, and learning opportunities based on their skills, experience, and preferences</p>
+        </div>
+
+        <div class="tech-badges">
+            <span class="tech-badge">🐍 Python 3.11+</span>
+            <span class="tech-badge">🤖 Microsoft Agent Framework</span>
+            <span class="tech-badge">🚀 GitHub Models</span>
+            <span class="tech-badge">🌐 Modern Web Interface</span>
+            <span class="tech-badge">📊 Vector Database</span>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-number">5-Tier</span>
+                <div class="stat-label">AI Analysis</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">83+</span>
+                <div class="stat-label">Dependencies</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">3580+</span>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">TF-IDF</span>
+                <div class="stat-label">Vector Search</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Core Features -->
+    <div class="slide">
+        <div class="slide-number">2/4</div>
+        <div class="slide-header">
+            <h1>🌟 Core Features & Capabilities</h1>
+        </div>
+        
+        <div class="content-grid">
+            <div class="feature-box">
+                <h4>Advanced AI Multi-Model System</h4>
+                <p>GPT-4o, GPT-4o-mini, GPT-4-turbo with intelligent fallback. 5-tier analysis: Skills (45%), Industry (30%), Career (15%), Culture (5%), Strategic (5%)</p>
+            </div>
+            
+            <div class="feature-box">
+                <h4>Vector Database Integration</h4>
+                <p>TF-IDF + Cosine Similarity for semantic resume-job matching. Sub-second search across 1000+ documents with persistent storage</p>
+            </div>
+            
+            <div class="feature-box">
+                <h4>Enterprise Web Interface</h4>
+                <p>Bootstrap 5 UI with dark navy theme, full CRUD operations, real-time analytics, PDF processing, and responsive mobile design</p>
+            </div>
+            
+            <div class="feature-box">
+                <h4>Professional PDF Analysis</h4>
+                <p>Automatic resume text extraction, AI-powered professional summaries, career trajectory planning, and branded PDF generation</p>
+            </div>
+        </div>
+
+        <h3>🎯 Advanced 5-Tier Matching Methodology</h3>
+        <ul class="bullet-list">
+            <li><strong>Skills Alignment (45%)</strong> - Technical skills, transferable skills, and emerging technologies</li>
+            <li><strong>Industry & Domain Fit (30%)</strong> - Industry experience and market trends alignment</li>
+            <li><strong>Career Progression Logic (15%)</strong> - Role seniority and growth potential assessment</li>
+            <li><strong>Cultural & Work Style Fit (5%)</strong> - Work environment and communication preferences</li>
+            <li><strong>Strategic Career Impact (5%)</strong> - Learning opportunities and network expansion</li>
+        </ul>
+    </div>
+
+    <!-- Slide 3: Technical Architecture -->
+    <div class="slide">
+        <div class="slide-number">3/4</div>
+        <div class="slide-header">
+            <h1>🏗️ Technical Architecture</h1>
+        </div>
+        
+        <div class="architecture-flow">
+            <h3 style="border: none; text-align: center; margin-bottom: 30px;">System Architecture Flow</h3>
+            <div class="flow-items">
+                <div class="flow-item">Web Interface<br/>Flask + Bootstrap</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">AI Agent<br/>Microsoft Framework</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">Vector Database<br/>Embeddings</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">GitHub Models<br/>GPT-4 Turbo</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="feature-box">
+                <h4>🔧 Backend Technology Stack</h4>
+                <ul class="bullet-list">
+                    <li>Flask 2.3+ with Flask-CORS & Flask-SocketIO</li>
+                    <li>Microsoft Agent Framework (Azure AI)</li>
+                    <li>OpenAI SDK 1.3.0+ & GitHub Models API</li>
+                    <li>Scikit-learn, NumPy, Pandas for ML</li>
+                    <li>PyPDF2, PDFplumber for document processing</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box">
+                <h4>📊 Performance Characteristics</h4>
+                <ul class="bullet-list">
+                    <li>Profile Creation: 200-500ms</li>
+                    <li>Resume Analysis: 2-5s (PDF + AI)</li>
+                    <li>Job Matching: 3-8s (AI + Vector)</li>
+                    <li>Memory Usage: 200-800MB</li>
+                    <li>Concurrent Users: 10-50 (single instance)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-section">
+            <h4>⚡ System Specifications</h4>
+            <p style="font-size: 1.4rem;">3580+ lines Flask app • 83+ Python dependencies • TF-IDF vector search • JSON + SQLite storage • Enterprise Bootstrap 5 UI</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Implementation & Roadmap -->
+    <div class="slide">
+        <div class="slide-number">4/4</div>
+        <div class="slide-header">
+            <h1>🚀 Implementation & Roadmap</h1>
+        </div>
+        
+        <div class="architecture-flow">
+            <h3 style="border: none; text-align: center; margin-bottom: 30px;">Quick Start Implementation</h3>
+            <div class="flow-items">
+                <div class="flow-item">Clone Repository<br/>GitHub</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">Setup Environment<br/>Conda + Python 3.11</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">Install Dependencies<br/>Requirements.txt</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-item">Launch Web App<br/>localhost:5004</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="feature-box">
+                <h4>✅ Current Capabilities (v2.1.0)</h4>
+                <ul class="bullet-list">
+                    <li>5-Tier AI Matching Algorithm</li>
+                    <li>Multi-Model AI Integration (GPT-4o series)</li>
+                    <li>TF-IDF Vector Database System</li>
+                    <li>Enterprise Bootstrap 5 Web Interface</li>
+                    <li>PDF Resume Analysis & Processing</li>
+                    <li>Real-time Analytics Dashboard</li>
+                </ul>
+            </div>
+            
+            <div class="feature-box">
+                <h4>⚠️ Current Limitations</h4>
+                <ul class="bullet-list">
+                    <li>Single instance (10-50 concurrent users)</li>
+                    <li>File-based storage (not scalable >10K profiles)</li>
+                    <li>High memory usage (400-800MB)</li>
+                    <li>API rate limits & network dependency</li>
+                    <li>No user authentication or encryption</li>
+                    <li>Manual deployment & configuration</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-number">10K</span>
+                <div class="stat-label">Max Profiles</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">$0.013</span>
+                <div class="stat-label">Per AI Request</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">POC</span>
+                <div class="stat-label">Ready Status</div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h3 style="border: none; color: white;">📞 Project Status & Usage</h3>
+            <p style="font-size: 1.3rem; margin: 20px 0;"><strong>Recommended for:</strong> Educational purposes, POC demonstrations, personal career planning, small teams (<50 users), research projects</p>
+            <div class="contact-links">
+                <a href="https://github.com/rubyferdianto/SkillMatch.AI" class="contact-link">📁 GitHub Repository</a>
+                <a href="https://github.com/rubyferdianto/SkillMatch.AI/issues" class="contact-link">🐛 Report Issues</a>
+                <a href="http://localhost:5003" class="contact-link">🌐 Local Demo</a>
+            </div>
+            <p style="margin-top: 30px; font-style: italic;"><strong>⚠️ Not for production:</strong> Educational & research tool • Built with ❤️ by the SkillsMatch.AI team</p>
+        </div>
+    </div>
+
+    <script>
+        // Print functionality for PowerPoint export
+        function exportToPowerPoint() {
+            window.print();
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const slides = document.querySelectorAll('.slide');
+            const currentSlide = Math.floor(window.scrollY / window.innerHeight);
+            
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
