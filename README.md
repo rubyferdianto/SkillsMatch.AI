@@ -1,8 +1,8 @@
-# SkillMatch.AI 🎯
+# SkillsMatch.AI 🎯
 
 **Intelligent Career and Skill Matching System**
 
-SkillMatch.AI is a comprehensive AI-powered platform that matches users with jobs, projects, and learning opportunities based on their skills, experience, and preferences. Built with Microsoft Agent Framework, powered by GitHub models and ChatGPT Pro, featuring vector database integration and modern web interface.
+SkillsMatch.AI is a comprehensive AI-powered platform that matches users with jobs, projects, and learning opportunities based on their skills, experience, and preferences. Built with Microsoft Agent Framework, powered by GitHub models and ChatGPT Pro, featuring vector database integration and modern web interface.
 
 ![Python](https://img.shields.io/badge/python-v3.11+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -56,8 +56,8 @@ SkillMatch.AI is a comprehensive AI-powered platform that matches users with job
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/rubyferdianto/SkillMatch.AI.git
-   cd SkillMatch.AI
+   git clone https://github.com/rubyferdianto/SkillsMatch.AI.git
+   cd SkillsMatch.AI
    ```
 
 2. **Create and activate conda environment**
@@ -91,7 +91,7 @@ SkillMatch.AI is a comprehensive AI-powered platform that matches users with job
 
 4. **Set up configuration and API keys**
    ```bash
-   python skillmatch.py setup
+   python skillsmatch.py setup
    ```
    
    **Required API Keys:**
@@ -112,14 +112,14 @@ SkillMatch.AI is a comprehensive AI-powered platform that matches users with job
 
 Try the sample profile:
 ```bash
-python skillmatch.py match --profile profiles/john_developer.json
+python skillsmatch.py match --profile profiles/john_developer.json
 ```
 
 ## 🏗️ System Architecture
 
 ### **🎯 AI Model Infrastructure**
 
-SkillMatch.AI uses a **multi-model AI strategy** with intelligent fallback:
+SkillsMatch.AI uses a **multi-model AI strategy** with intelligent fallback:
 
 #### **Primary AI Models (Priority Order)**
 1. **GPT-4o** - ChatGPT Pro (Best quality, comprehensive analysis)
@@ -208,7 +208,7 @@ Overall_Score = (
 
 ## 🌐 Web Interface
 
-SkillMatch.AI features a comprehensive, enterprise-grade web interface with advanced functionality:
+SkillsMatch.AI features a comprehensive, enterprise-grade web interface with advanced functionality:
 
 ### Quick Start (Web Interface)
 To run the web interface:
@@ -239,7 +239,7 @@ Visit `http://localhost:5003` to access the web interface.
 - **📱 Responsive Design** - Works perfectly on desktop, tablet, and mobile devices
 
 ### Web Interface Highlights
-- **Modern UI**: Bootstrap 5 design with custom SkillMatch.AI styling and smooth animations
+- **Modern UI**: Bootstrap 5 design with custom SkillsMatch.AI styling and smooth animations
 - **Real-time Updates**: Live progress tracking for all operations
 - **Smart Forms**: Interactive forms with validation, suggestion chips, and dynamic content
 - **Professional UX**: Intuitive navigation, flash messages, modals, and responsive layouts
@@ -275,7 +275,7 @@ This project is currently optimized for local development. All features work on 
 
 ## � Career Profiles System
 
-SkillMatch.AI features a comprehensive career profiles management system that allows users to create, manage, and optimize their professional profiles for better job matching.
+SkillsMatch.AI features a comprehensive career profiles management system that allows users to create, manage, and optimize their professional profiles for better job matching.
 
 ### 🌟 Profile Management Features
 
@@ -477,7 +477,7 @@ SkillsMatch.AI/
 │   ├── templates/         # Jinja2 HTML templates
 │   ├── static/           # CSS, JavaScript, and static assets
 │   └── data/             # SQLite database and backup files
-├── src/skillmatch/        # Core application logic
+├── src/skillsmatch/        # Core application logic
 │   ├── agents/           # AI agent implementations
 │   ├── models/           # Pydantic data models
 │   ├── utils/            # Matching algorithms and utilities
@@ -609,7 +609,7 @@ SkillsMatch.AI/
 
 ### **💡 Recommended Use Cases**
 
-Given these limitations, SkillMatch.AI is best suited for:
+Given these limitations, SkillsMatch.AI is best suited for:
 - **🎓 Educational/Demo Purposes**: Learning AI application development and career matching concepts
 - **🔬 Proof of Concept**: Demonstrating AI-powered career matching and skill analysis
 - **👤 Personal Use**: Individual career planning, skill gap analysis, and professional development
@@ -627,38 +627,38 @@ Given these limitations, SkillMatch.AI is best suited for:
 
 ### Command Line Interface
 
-SkillMatch.AI provides several CLI commands:
+SkillsMatch.AI provides several CLI commands:
 
 #### 🔍 Find Matching Opportunities
 ```bash
 # Use existing profile
-python skillmatch.py match --profile profiles/john_developer.json
+python skillsmatch.py match --profile profiles/john_developer.json
 
 # Interactive profile creation
-python skillmatch.py match --interactive
+python skillsmatch.py match --interactive
 ```
 
 #### 📚 Analyze Skill Gaps
 ```bash
 # General skill gap analysis
-python skillmatch.py gaps --profile profiles/john_developer.json
+python skillsmatch.py gaps --profile profiles/john_developer.json
 
 # Target-specific analysis
-python skillmatch.py gaps --profile profiles/john_developer.json --target-role "Senior Data Scientist"
+python skillsmatch.py gaps --profile profiles/john_developer.json --target-role "Senior Data Scientist"
 ```
 
 #### 🎓 Find Learning Opportunities
 ```bash
 # Search for specific skills
-python skillmatch.py learn --skills "machine learning, deep learning" --difficulty intermediate --max-cost 500
+python skillsmatch.py learn --skills "machine learning, deep learning" --difficulty intermediate --max-cost 500
 
 # Free courses only
-python skillmatch.py learn --skills "python, sql" --max-cost 0
+python skillsmatch.py learn --skills "python, sql" --max-cost 0
 ```
 
 #### 💬 Interactive Chat
 ```bash
-python skillmatch.py chat
+python skillsmatch.py chat
 ```
 
 
@@ -666,15 +666,15 @@ python skillmatch.py chat
 
 ### Python API
 
-You can also use SkillMatch.AI programmatically:
+You can also use SkillsMatch.AI programmatically:
 
 ```python
 import asyncio
-from skillmatch import SkillMatchAgent, UserProfile
+from skillsmatch import SkillsMatchAgent, UserProfile
 
 async def main():
     # Initialize the agent
-    agent = SkillMatchAgent(
+    agent = SkillsMatchAgent(
         github_token="your_github_token",
         model_id="openai/gpt-4.1-mini"
     )
@@ -699,22 +699,22 @@ asyncio.run(main())
 
 ## 🚀 Quick Command Reference
 
-### Core SkillMatch.AI Commands
+### Core SkillsMatch.AI Commands
 ```bash
 # Setup (first time only)
-python skillmatch.py setup
+python skillsmatch.py setup
 
 # Find job matches
-python skillmatch.py match --profile profiles/john_developer.json
+python skillsmatch.py match --profile profiles/john_developer.json
 
 # Analyze skill gaps  
-python skillmatch.py gaps --profile profiles/john_developer.json
+python skillsmatch.py gaps --profile profiles/john_developer.json
 
 # Find learning opportunities
-python skillmatch.py learn --skills "python, machine learning"
+python skillsmatch.py learn --skills "python, machine learning"
 
 # Chat with AI career advisor
-python skillmatch.py chat
+python skillsmatch.py chat
 ```
 
 ### File Structure After Setup
@@ -732,8 +732,8 @@ SkillsMatch.AI/
 ### Core Components
 
 ```
-SkillMatch.AI/
-├── src/skillmatch/
+SkillsMatch.AI/
+├── src/skillsmatch/
 │   ├── models/              # Data models (Pydantic)
 │   │   ├── user_profile.py  # User profiles and skills
 │   │   └── opportunities.py # Jobs, projects, learning
@@ -755,7 +755,7 @@ SkillMatch.AI/
 
 The system uses Microsoft Agent Framework with the following components:
 
-- **SkillMatchAgent**: Main AI agent with specialized tools
+- **SkillsMatchAgent**: Main AI agent with specialized tools
 - **Tools**: Function calling for specific operations
   - `find_matching_opportunities`
   - `calculate_match_score`
@@ -804,8 +804,8 @@ The system organizes skills into categories:
 export GITHUB_TOKEN="your_github_personal_access_token"
 
 # Optional
-export SKILLMATCH_MODEL="openai/gpt-4.1-mini"
-export SKILLMATCH_CONFIG_PATH="config/config.json"
+export SKILLSMATCH_MODEL="openai/gpt-4.1-mini"
+export SKILLSMATCH_CONFIG_PATH="config/config.json"
 ```
 
 ### Configuration File
@@ -833,10 +833,10 @@ pip install pytest pytest-asyncio
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=src/skillmatch
+pytest tests/ --cov=src/skillsmatch
 ```
 
-## 📈 Extending SkillMatch.AI
+## 📈 Extending SkillsMatch.AI
 
 ### Adding New Skills
 
@@ -890,12 +890,12 @@ Add to `data/opportunities_database.json`:
 
 ### Custom Matching Logic
 
-Extend the `SkillMatcher` class:
+Extend the `SkillsMatcher` class:
 
 ```python
-from skillmatch.utils import SkillMatcher
+from skillsmatch.utils import SkillsMatcher
 
-class CustomSkillMatcher(SkillMatcher):
+class CustomSkillsMatcher(SkillsMatcher):
     def _calculate_custom_score(self, user_profile, opportunity):
         # Your custom matching logic
         return score
@@ -1012,7 +1012,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ### **💡 Recommended Use Cases**
 
-Given these limitations, SkillMatch.AI is best suited for:
+Given these limitations, SkillsMatch.AI is best suited for:
 - **🎓 Educational/Demo Purposes**: Learning AI application development
 - **🔬 Proof of Concept**: Demonstrating AI-powered career matching
 - **👤 Personal Use**: Individual career planning and skill analysis
@@ -1042,9 +1042,9 @@ Given these limitations, SkillMatch.AI is best suited for:
 
 ## �📞 Support
 
-- 📧 Email: [team@skillmatch.ai](mailto:team@skillmatch.ai)
-- 🐛 Issues: [GitHub Issues](https://github.com/rubyferdianto/SkillMatch.AI/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/rubyferdianto/SkillMatch.AI/discussions)
+- 📧 Email: [team@skillsmatch.ai](mailto:team@skillsmatch.ai)
+- 🐛 Issues: [GitHub Issues](https://github.com/rubyferdianto/SkillsMatch.AI/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/rubyferdianto/SkillsMatch.AI/discussions)
 
 ## 🗺️ Roadmap
 
@@ -1118,4 +1118,4 @@ Given these limitations, SkillMatch.AI is best suited for:
 
 ---
 
-**Built with ❤️ by the SkillMatch.AI team**
+**Built with ❤️ by the SkillsMatch.AI team**
